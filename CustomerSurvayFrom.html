@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            width: 300px;
+            margin: 20px auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        input[type="submit"], input[type="reset"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, input[type="reset"]:hover {
+            background-color: #45a049;
+        }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <form id="surveyForm">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+
+        <label for="country">Country:</label>
+        <select id="country" name="country" required>
+            <option value="">Select Country</option>
+            <option value="usa">IND</option>
+            <option value="usa">UK</option>
+            <option value="usa">AUS</option>
+            <option value="usa">USA</option>
+            <option value="canada">Canada</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label>Gender:</label>
+        <label for="male">Male</label>
+        <input type="checkbox" id="male" name="gender" value="male">
+        <label for="female">Female</label>
+        <input type="checkbox" id="female" name="gender" value="female" required>
+
+        <label for="profession">Profession:</label>
+        <input type="text" id="profession" name="profession" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="mobile">Mobile Number:</label>
+        <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+
+    <div id="popup">
+        <h2>Survey Form Submission</h2>
+        <p id="popupContent"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        document.getElementById("surveyForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            if (validateForm()) {
+                showPopup();
+            }
+        });
+
+        function validateForm() {
+            // Add your validation logic here
+            // For simplicity, we're assuming all fields are required
+            var formIsValid = true;
+            var formElements = document.getElementById("surveyForm").elements;
+            for (var i = 0; i < formElements.length; i++) {
+                if (formElements[i].type !== "submit" && formElements[i].type !== "reset") {
+                    if (!formElements[i].checkValidity()) {
+                        formIsValid = false;
+                        alert("Please fill in all required fields.");
+                        break;
+                    }
+                }
+            }
+            return formIsValid;
+        }
+
+        function showPopup() {
+            var popupContent = "";
+            var formElements = document.getElementById("surveyForm").elements;
+            for (var i = 0; i < formElements.length; i++) {
+                if (formElements[i].type !== "submit" && formElements[i].type !== "reset") {
+                    popupContent += "<strong>" + formElements[i].name + ":</strong> " + formElements[i].value + "<br>";
+                }
+            }
+            document.getElementById("popupContent").innerHTML = popupContent;
+            document.getElementById("popup").style.display = "block";
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("surveyForm").reset();
+        }
+    </script>
+</body>
+</html>
