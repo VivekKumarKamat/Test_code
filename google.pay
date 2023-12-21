@@ -1,0 +1,31 @@
+import requests
+from bs4 import BeautifulSoup
+
+def get_weather_data(city):
+    base_url = f"https://www.google.com/search?q=weather+{city}"
+
+    # Set the user-agent to avoid detection as a bot
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+
+    try:
+        # Send an HTTP GET request to the Google search page for the weather
+        response = requests.get(base_url, headers=headers)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the HTML content of the page using BeautifulSoup
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Extract weather data from the parsed HTML
+            temperature = soup.find('div', {'class': 'BNeawe iBp4i AP7Wnd'}).get_text()
+            condition = soup.find('div', {'class': 'BNeawe tAd8D AP7Wnd'}).get_text()
+            
+            # Print the weather data
+            print(f"Weather in {city}: {temperature}, {condition}")
+        else:
+            print(f"Failed to retrieve weather data. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# Example: Get weather data for New York
+get_weather_data("New York")
